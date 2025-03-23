@@ -2,6 +2,8 @@ import requests
 import pymongo
 import os
 
+# TBD: change data source to timeseries data and simulate streaming
+
 MONGO_URI = os.getenv("MONGO_URI", "mongodb://mongo:27017/")
 DB_NAME = "store"
 COLLECTION_NAME = "products"
