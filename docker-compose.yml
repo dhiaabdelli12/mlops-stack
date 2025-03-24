@@ -2,25 +2,21 @@ version: '3.8'
 services:
   ingestion:
     build: ./ingestion
-    container_name: ingestion_service
+    container_name: ingestion
     restart: unless-stopped
     volumes:
       - ./ingestion:/app
-    depends_on:
-      - mongodb
-    environment:
-      - MONGO_URI=mongodb://mongodb:27017
     networks:
       - ml-pipeline
 
-  mongodb:
-    image: mongo:latest
-    container_name: mongo_db
-    restart: unless-stopped
-    ports:
-      - "27017:27017"
+  data-streaming:
+    build: ./data/streaming
+    container_name: streaming
+    volumes:
+      - ./data/streaming:/app
     networks:
       - ml-pipeline
+
 
 networks:
   ml-pipeline:
