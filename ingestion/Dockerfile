@@ -5,4 +5,4 @@ ENV PATH="/root/.local/bin:$PATH"
 COPY pyproject.toml poetry.lock ./
 RUN poetry install --no-root --no-interaction --no-ansi
 COPY fetch_data.py .
-CMD ["sleep", "infinity"]
+CMD ["poetry", "run", "python", "fetch_data.py"]
