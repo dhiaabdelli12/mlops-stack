@@ -23,8 +23,19 @@ services:
       - postgres_data:/var/lib/postgresql/data
     networks:
       - ml-pipeline
-
   
+  data_exploration:
+    build: ./data_exploration
+    depends_on:
+      - datastore
+    env_file:
+      - .env
+    container_name: data_exploration
+    volumes:
+      - ./data_exploration:/app
+    networks:
+      - ml-pipeline
+
 volumes:
   postgres_data:
 
