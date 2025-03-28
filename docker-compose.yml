@@ -1,16 +1,35 @@
 version: '3.8'
+
 services:
-  ingestion:
-    build: ./ingestion
-    depends_on:
-      - datastore
+  data_ingestion:
+    build:
+      context: .
+      dockerfile: data_ingestion/Dockerfile
+    container_name: data_ingestion
     env_file:
       - .env
-    container_name: ingestion
     volumes:
-      - ./ingestion:/app
+      - ./data_ingestion/src:/app/src
+      - ./config.yml:/app/config.yml
     networks:
       - ml-pipeline
+    depends_on:
+      - datastore
+
+  data_exploration:
+    build:
+      context: .
+      dockerfile: data_exploration/Dockerfile
+    container_name: data_exploration
+    env_file:
+      - .env
+    volumes:
+      - ./data_exploration/src:/app/src
+      - ./config.yml:/app/config.yml
+    networks:
+      - ml-pipeline
+    depends_on:
+      - datastore
 
   datastore:
     image: postgres:latest
@@ -24,17 +43,23 @@ services:
     networks:
       - ml-pipeline
   
-  data_exploration:
-    build: ./data_exploration
-    depends_on:
-      - datastore
+  
+
+  data_preparation:
+    build:
+      context: ./data_preparation
+    container_name: data_preparation
     env_file:
       - .env
-    container_name: data_exploration
     volumes:
-      - ./data_exploration:/app
+      - ./data_preparation:/app
+      - ./config.yml:/app/config.yml
+      - ./poetry.lock:/app/poetry.lock
+      - ./pyproject.toml:/app/pyproject.toml
     networks:
       - ml-pipeline
+    depends_on:
+      - datastore
 
 volumes:
   postgres_data:

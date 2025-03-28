@@ -1,0 +1,3 @@
+data_preparation:
+  - normalize: True
+  - logging: True
