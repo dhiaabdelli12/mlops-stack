@@ -1,0 +1,4 @@
+data_preparation:
+  normalize: True
+  logging: True
+  raw_data_table: "magic_gamma_telescope"

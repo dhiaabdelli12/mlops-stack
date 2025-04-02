@@ -1,5 +1,5 @@
-from utils.dataloader import *
-import pytest
+from src.utils.dataloader import *
+
 
 def test_fetch_ucirepo():
     data = fetch_ucirepo(id=159)

@@ -1,16 +1,52 @@
 version: '3.8'
+
 services:
-  ingestion:
-    build: ./ingestion
-    depends_on:
-      - datastore
+  data_ingestion:
+    build:
+      context: .
+      dockerfile: data_ingestion/Dockerfile
+    container_name: data_ingestion
     env_file:
       - .env
-    container_name: ingestion
     volumes:
-      - ./ingestion:/app
+      - ./data_ingestion/src:/app/src
+      - ./config.yml:/app/config.yml
     networks:
       - ml-pipeline
+    depends_on:
+      - datastore
+
+  data_exploration:
+    build:
+      context: .
+      dockerfile: data_exploration/Dockerfile
+    command: sleep infinity
+    container_name: data_exploration
+    env_file:
+      - .env
+    volumes:
+      - ./data_exploration/src:/app/src
+      - ./config.yml:/app/config.yml
+    networks:
+      - ml-pipeline
+    depends_on:
+      - datastore
+
+
+  data_preparation:
+    build:
+      context: .
+      dockerfile: data_preparation/Dockerfile
+    container_name: data_preparation
+    env_file:
+      - .env
+    volumes:
+      - ./data_preparation/src:/app/src
+      - ./config.yml:/app/config.yml
+    networks:
+      - ml-pipeline
+    depends_on:
+      - datastore
 
   datastore:
     image: postgres:latest
@@ -23,8 +59,8 @@ services:
       - postgres_data:/var/lib/postgresql/data
     networks:
       - ml-pipeline
-
   
+
 volumes:
   postgres_data:
 
